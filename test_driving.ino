@@ -329,7 +329,6 @@ void loop() {
             {
                 if(param.toInt() == 1){
                     StartAutoDriving();
-                 Serial.println("hello11");
                 }else
                     StopAutoDriving();
                 }
