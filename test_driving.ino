@@ -337,6 +337,7 @@ void loop() {
      }
     }
      AutoDriving();
+       Serial.println("see this changes");
   
 /*  if(Serial.available() > 0)
     {   
