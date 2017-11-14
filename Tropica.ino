@@ -145,7 +145,7 @@ void Turn(float flag)
   {
     SetSteering(-0.5);  // 원크게돌기위해
     SetSpeed(0.1);  // 충돌방지
-    while (-20<f_left-f_right<20)   //
+    while ( (-20<f_left-f_right)&&(f_left-f_right<20))   //
     {
       
       cur_steering=cur_steering+0.05;
@@ -157,7 +157,7 @@ void Turn(float flag)
   {
     SetSteering(0.5);  // 원크게돌기위해
     SetSpeed(0.1);  // 충돌방지
-    while (-20<f_left-f_right<20)   //
+    while ( (-20<f_left-f_right)&&(f_left-f_right<20) )  //
     {
       
       cur_steering=cur_steering-0.05;
