@@ -138,7 +138,7 @@ void SetSpeed(float speed)
 //회전
 void Turn(flag);
 {
-  SetSpeed(0)
+  SetSpeed(0);
   if (flag==1) // 우회전
   {
     SetSteering(-0.5);  // 원크게돌기위해
@@ -237,17 +237,10 @@ void loop()
 {
 //CheckBattery();
 
-
-
-
- 
   // 판단
   // 히스테리시스 법칙에 따른다 (판단 근거가 없다면 이전 상태와 동일하게 수행)
   float compute_speed = cur_speed;
   float compute_steering = cur_steering;
-
-       
-
 
 
 //직진 기본루프
@@ -257,6 +250,32 @@ right=GetDistance(R_TRIG,R_ECHO);
 f_left=GetDistance(FL_TRIG,FL_ECHO);
 f_right=GetDistance(FR_TRIG,FR_ECHO);
 
+if (f_center<200) // 전방에감지될때
+{
+  SetSpeed=0;
+}
+else 
+  if (left-right<50) // 우측쏠림
+  {
+    cur_steering=-0.3;
+    SetSteering(cur_steering);
+    while (cur_steering==0)
+    {
+      cur_steering=cur_steering+0.01;
+      SetSteering(cur_steering);
+    }
+  }
+  else if (right-left<50) //좌측쏠림
+  {
+    cur_steering=0.3;
+    SetSteering(cur_steering);
+    while (cur_steering==0)
+    {
+      cur_steering=cur_steering-0.01;
+      SetSteering(cur_steering);
+    }
+  }
+}
 
 
 
@@ -267,11 +286,11 @@ cf_right=GetDistance(FR_TRIG,FR_ECHO);
 
 if (cf_left-f_left>50)  // 좌전방이 트일때 좌회전
 {
-  Turn(1)
+  Turn(1);
 }
  else if (cf_right-f_right>50)
  {
-   Turn(-1)
+   Turn(-1);
  }
 
 
@@ -419,11 +438,7 @@ if (cf_left-f_left>50)  // 좌전방이 트일때 좌회전
   SetSteering(compute_steering);
   SetSpeed(compute_speed);.
   */
-cf_center=GetDistance(FC_TRIG,FC_ECHO);
-cleft=GetDistance(L_TRIG,L_ECHO);
-cright=GetDistance(R_TRIG,R_ECHO);
-cf_left=GetDistance(FL_TRIG,FL_ECHO);
-cf_right=GetDistance(FR_TRIG,FR_ECHO);
+
 
 }
 
