@@ -254,12 +254,27 @@ right=GetDistance(R_TRIG,R_ECHO);
 f_left=GetDistance(FL_TRIG,FL_ECHO);
 f_right=GetDistance(FR_TRIG,FR_ECHO);
 
-if (f_center<200) // 전방에감지될때
+if (f_center<500) // 전방에감지될때
 {
   SetSpeed(0);
 }
 else 
 {
+  SetSpeed(0.5); //최대속도 정해야함
+  //조향   
+cf_left=GetDistance(FL_TRIG,FL_ECHO);
+cf_right=GetDistance(FR_TRIG,FR_ECHO);
+if (cf_left-f_left>50)  // 좌전방이 트일때 좌회전
+{
+  Turn(1);
+}
+ else if (cf_right-f_right>50)
+ {
+   Turn(-1);
+ }
+
+
+  
   if (left-right<50) // 우측쏠림
   {
     cur_steering=-0.3;
@@ -280,11 +295,12 @@ else
       SetSteering(cur_steering);
     }
   }
+  
 }
 
 
 
-
+/*
 //조향   cf 기존값
 cf_left=GetDistance(FL_TRIG,FL_ECHO);
 cf_right=GetDistance(FR_TRIG,FR_ECHO);
