@@ -51,6 +51,8 @@ float f_left;
 float f_right;
 float left;
 float right;
+float cf_left;
+float cf_right;
 
 
 float cur_steering;
@@ -136,7 +138,7 @@ void SetSpeed(float speed)
 
 
 //회전
-void Turn(flag);
+void Turn(float flag)
 {
   SetSpeed(0);
   if (flag==1) // 우회전
@@ -146,7 +148,7 @@ void Turn(flag);
     while (-20<f_left-f_right<20)   //
     {
       
-      cur_steering=cur_steering+0.0.5;
+      cur_steering=cur_steering+0.05;
       SetSteering(cur_steering);
       
     }
@@ -158,10 +160,12 @@ void Turn(flag);
     while (-20<f_left-f_right<20)   //
     {
       
-      cur_steering=cur_steering-0.0.5;
+      cur_steering=cur_steering-0.05;
       SetSteering(cur_steering);
-  
+    }
+  }
 }
+
 
 
 
@@ -252,9 +256,10 @@ f_right=GetDistance(FR_TRIG,FR_ECHO);
 
 if (f_center<200) // 전방에감지될때
 {
-  SetSpeed=0;
+  SetSpeed(0);
 }
 else 
+{
   if (left-right<50) // 우측쏠림
   {
     cur_steering=-0.3;
@@ -283,6 +288,7 @@ else
 //조향   cf 기존값
 cf_left=GetDistance(FL_TRIG,FL_ECHO);
 cf_right=GetDistance(FR_TRIG,FR_ECHO);
+
 
 if (cf_left-f_left>50)  // 좌전방이 트일때 좌회전
 {
@@ -441,4 +447,3 @@ if (cf_left-f_left>50)  // 좌전방이 트일때 좌회전
 
 
 }
-
