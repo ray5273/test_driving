@@ -135,6 +135,35 @@ void SetSpeed(float speed)
 
 
 
+//회전
+void Turn(flag);
+{
+  SetSpeed(0)
+  if (flag==1) // 우회전
+  {
+    SetSteering(-0.5);  // 원크게돌기위해
+    SetSpeed(0.1);  // 충돌방지
+    while (-20<f_left-f_right<20)   //
+    {
+      
+      cur_steering=cur_steering+0.0.5;
+      SetSteering(cur_steering);
+      
+    }
+  }
+  else if (flag==-1) // 좌회전
+  {
+    SetSteering(0.5);  // 원크게돌기위해
+    SetSpeed(0.1);  // 충돌방지
+    while (-20<f_left-f_right<20)   //
+    {
+      
+      cur_steering=cur_steering-0.0.5;
+      SetSteering(cur_steering);
+  
+}
+
+
 
 
 
@@ -221,7 +250,7 @@ void loop()
 
 
 
-//직진
+//직진 기본루프
 f_center=GetDistance(FC_TRIG,FC_ECHO);
 left=GetDistance(L_TRIG,L_ECHO);
 right=GetDistance(R_TRIG,R_ECHO);
@@ -230,45 +259,20 @@ f_right=GetDistance(FR_TRIG,FR_ECHO);
 
 
 
-SetSpeed(0.5);
-
-if (f_center<200)  // 전방 멈춤
-{
-  SetSpeed(0);
-}
 
 
+//조향   cf 기존값
+cf_left=GetDistance(FL_TRIG,FL_ECHO);
+cf_right=GetDistance(FR_TRIG,FR_ECHO);
 
-
-/*
-  else
-  {
-    SetSpeed(0.5);
-
-    if (left-right<100)    // 왼쪽으로 치우칠때
-    {
-      SetSteering(0.5);
-    }
-    else if (right-left<100) //오른쪽으로 치우칠때
-    {
-      SetSteering(-0.5);
-    }
-  }
-  */
-
-
-
-//조향
-flag=1 // 우회전
-flag=-1 // 좌회전
-if (f_left1-f_left>50)  // 좌전방이 트일때 좌회전
+if (cf_left-f_left>50)  // 좌전방이 트일때 좌회전
 {
   Turn(1)
 }
-
-
-
-
+ else if (cf_right-f_right>50)
+ {
+   Turn(-1)
+ }
 
 
 
@@ -413,7 +417,13 @@ if (f_left1-f_left>50)  // 좌전방이 트일때 좌회전
 
   // 제어
   SetSteering(compute_steering);
-  SetSpeed(compute_speed);
-*/
+  SetSpeed(compute_speed);.
+  */
+cf_center=GetDistance(FC_TRIG,FC_ECHO);
+cleft=GetDistance(L_TRIG,L_ECHO);
+cright=GetDistance(R_TRIG,R_ECHO);
+cf_left=GetDistance(FL_TRIG,FL_ECHO);
+cf_right=GetDistance(FR_TRIG,FR_ECHO);
+
 }
 
