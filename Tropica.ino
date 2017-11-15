@@ -137,25 +137,25 @@ void SetSpeed(float speed)
 
 
 
-//회전
+//회전     +말고 -로도 조정되야함   직진 방향 코드로 조정
 void Turn(float flag)
 {
   SetSpeed(0);
   if (flag==1) // 우회전
   {
-    SetSteering(-0.5);  // 원크게돌기위해
+    cur_steering=-0.5;
+    SetSteering(cur_steering);  // 원크게돌기위해
     SetSpeed(0.1);  // 충돌방지
     while ( (-20<f_left-f_right)&&(f_left-f_right<20))   //
     {
-      
       cur_steering=cur_steering+0.05;
       SetSteering(cur_steering);
-      
     }
   }
   else if (flag==-1) // 좌회전
   {
-    SetSteering(0.5);  // 원크게돌기위해
+    cur_steering=0.5;
+    SetSteering(cur_steering);  // 원크게돌기위해
     SetSpeed(0.1);  // 충돌방지
     while ( (-20<f_left-f_right)&&(f_left-f_right<20) )  //
     {
@@ -274,6 +274,12 @@ if (cf_left-f_left>50)  // 좌전방이 트일때 좌회전
  }
 
 
+
+
+
+
+
+
   
   if (left-right<50) // 우측쏠림
   {
@@ -295,8 +301,47 @@ if (cf_left-f_left>50)  // 좌전방이 트일때 좌회전
       SetSteering(cur_steering);
     }
   }
-  
 }
+
+
+
+
+
+//회전 연습 코드
+SetSpeed(0.5);
+delay(1000);
+SetSpeed(0);
+delay(1000);
+cur_steering=-0.5;
+SetSteering(cur_steering) ;//우회전 전에 크게 돌기
+    while ( cur_steering==1)   //
+    {
+      cur_steering=cur_steering+0.05;
+      SetSteering(cur_steering);
+    }
+    while ( cur_steering==0)   //
+    {
+      cur_steering=cur_steering-0.05;
+      SetSteering(cur_steering);
+    }
+SetSpeed(0.5);
+delay(1000);
+SetSpeed(0);
+delay(1000);
+cur_steering=0.5;
+SetSteering(cur_steering); //좌회전 전에 크게 돌기
+    while ( cur_steering==-1)   //
+    {
+      cur_steering=cur_steering-0.05;
+      SetSteering(cur_steering);
+    }
+    while ( cur_steering==0)   //
+    {
+      cur_steering=cur_steering+0.05;
+      SetSteering(cur_steering);
+    }
+
+
 
 
 
@@ -463,3 +508,4 @@ if (cf_left-f_left>50)  // 좌전방이 트일때 좌회전
 
 
 }
+ 
