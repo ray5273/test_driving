@@ -138,7 +138,7 @@ void SetSpeed(float speed)
 
 
 //회전     
-void Turn(float flag)
+void Turn(float flag)   //  
 {
   SetSpeed(0);
   if (flag==1) // 우회전
