@@ -32,6 +32,8 @@ int punch_time = 200; // 정지 마찰력 극복 시간 (단위 msec)
 int stop_time = 300; // 전진후진 전환 시간 (단위 msec)
 int battery_cell = 2; // 배터리 셀 개수
 float voltage_error = 1.08; // 전압 오차 (1이 오차 없음)
+
+
 // 자율주행 튜닝 파라미터
 int center_detect = 200; // 전방 감지 거리 (단위: mm)
 int center_start = 160; // 전방 출발 거리 (단위: mm)
@@ -138,39 +140,50 @@ void SetSpeed(float speed)
 
 
 //회전     
-void Turn(float flag)   //  
+void Turn(float flag)
 {
   SetSpeed(0);
   if (flag==1) // 우회전
   {
     SetSpeed(0.05);  // 충돌방지
-    cur_steering=-0.5;
-    SetSteering(cur_steering);  // 원크게돌기위해
-    delay(100)
+    SetSteering(-0.5);  // 원크게돌기위해
+    delay(100);
+    cur_steering=1;
+    SetSteering(cur_steering);
     while ( (-20<f_left-f_right)&&(f_left-f_right<20))   //
     {
       cur_steering=cur_steering+0.05;
       SetSteering(cur_steering);
-      delay(200)
+      delay(200);
     }
+    SetSteering(0);
+    //직진코드 받기
   }
   else if (flag==-1) // 좌회전
   {
     SetSpeed(0.05);  // 충돌방지
-    cur_steering=0.5;
-    SetSteering(cur_steering);  // 원크게돌기위해
-    delay(100)
+    SetSteering(0.5);
+    delay(100);
+    cur_steering=-1;
+    SetSteering(cur_steering); //원크게돌기위해
     while ( (-20<f_left-f_right)&&(f_left-f_right<20) )  //
     {
       cur_steering=cur_steering-0.05;
       SetSteering(cur_steering);
-      delay(200)
+      delay(200);
     }
+    SetSteering(0);
+    //직진코드 받기
   }
 }
 
 
 
+void Backward()    // 변수 조정
+{
+      SetSpeed(-0.2);
+      delay(200);
+}
 
 
 
