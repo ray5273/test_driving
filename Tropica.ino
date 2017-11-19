@@ -355,7 +355,7 @@ void Turn(float flag)
     delay(100);                                                                           //delay 값들 조정해야할지도
     cur_steering = 1;
     SetSteering(cur_steering);
-    while (abs(right - left) > 50) //  좌우 센서로 받는게 최선인지 확인해야함                    //약간 수정함       //회전후 어디로 쏠리느냐에 따라 right-left, left-right 결정해야할듯     //유턴할때 약간 코드가 겹칠거같기도하고
+    while (abs(right - left) > 50) //  좌우 센서로 받는게 최선인지 확인해야함       //회전후 어디로 쏠리느냐에 따라 right-left, left-right 결정해야할듯     //유턴할때 약간 코드가 겹칠거같기도하고
     {
 
       f_center1 = GetDistance(FC_TRIG, FC_ECHO);
@@ -397,7 +397,7 @@ void Turn(float flag)
     delay(100);
     cur_steering = -1;
     SetSteering(cur_steering); //원크게돌기위해
-    while ( abs(left - right) > 50)                                         //코드 이상했음 수정
+    while ( abs(left - right) > 50)                                         
     {
 
       f_center1 = GetDistance(FC_TRIG, FC_ECHO);
@@ -478,11 +478,11 @@ void AutoDriving()
 
 
 
-  if (-fl > 50) //좌전방이 트일때  좌회전
+  if ((-fl > 50) || (f_left>400&&f_right<400) ) //좌전방이 트일때  좌회전  //유턴 고려 // 400 조정해야함
   {
     Turn(-1);
   }
-  else if (-fr > 50) //우전방이 트일때  우회전
+  else if ( (-fr > 50) || (f_left<400&&f_right>400)) //우전방이 트일때  우회전
   {
     Turn(1);
   }
@@ -505,7 +505,7 @@ void AutoDriving()
     else  // 방향 조정 직진
     {
 
-      if (left - right < 50) // 우측쏠림
+      if (left>right && left - right < 50) // 우측쏠림
       {
         cur_steering = -0.2;                                                            // 조정 해야함
         cur_speed = 0.8;                                                                // 조정 해야함
@@ -541,7 +541,7 @@ void AutoDriving()
           }
         }
       }
-      else if (right - left < 50) //좌측쏠림
+      else if (right > left && right - left < 50) //좌측쏠림
       {
         cur_steering = 0.2;  // 조정 해야함
         cur_speed = 0.8; // 조정 해야함
