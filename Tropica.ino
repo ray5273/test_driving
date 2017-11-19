@@ -352,10 +352,10 @@ void Turn(float flag)
     cur_speed = 0.05;
     SetSpeed(cur_speed);  // 충돌방지
     SetSteering(-0.5);  // 원크게돌기위해
-    delay(100);
+    delay(100);                                                                           //delay 값들 조정해야할지도
     cur_steering = 1;
     SetSteering(cur_steering);
-    while (abs(left - right) > 50) //  좌우 센서로 받는게 최선인지 확인해야함
+    while (abs(right - left) > 50) //  좌우 센서로 받는게 최선인지 확인해야함                    //약간 수정함       //회전후 어디로 쏠리느냐에 따라 right-left, left-right 결정해야할듯     //유턴할때 약간 코드가 겹칠거같기도하고
     {
 
       f_center1 = GetDistance(FC_TRIG, FC_ECHO);
@@ -381,7 +381,7 @@ void Turn(float flag)
       SetSteering(cur_steering);
       SetSpeed(cur_speed);
 
-      if  ((f == 0) + (fl == 0) + (fr == 0) + (l == 0) + (r == 0) >= 4)//정지해있을때 나와야함
+      if  ((f < 3) + (fl < 3) + (fr < 3) + (l < 3) + (r < 3) >= 4)//정지해있을때 나와야함
       {
         break;
       }
@@ -397,7 +397,7 @@ void Turn(float flag)
     delay(100);
     cur_steering = -1;
     SetSteering(cur_steering); //원크게돌기위해
-    while ( abs(left - right > 50)) //
+    while ( abs(left - right) > 50)                                         //코드 이상했음 수정
     {
 
       f_center1 = GetDistance(FC_TRIG, FC_ECHO);
@@ -424,7 +424,7 @@ void Turn(float flag)
       SetSteering(cur_steering);
       SetSpeed(cur_speed);
 
-      if  ((f == 0) + (fl == 0) + (fr == 0) + (l == 0) + (r == 0) >= 4)//정지해있을때 나와야함
+      if  ((f < 3) + (fl < 3) + (fr < 3) + (l < 3) + (r < 3) >= 4)//정지해있을때 나와야함
       {
         break;
       }
@@ -486,19 +486,19 @@ void AutoDriving()
   {
     Turn(1);
   }
-  else if ((f == 0) + (fl == 0) + (fr == 0) + (l == 0) + (r == 0) >= 4) //5개 센서중 4개 이상이 거리차가 없을때 후진
+  else if ((f < 3) + (fl < 3) + (fr < 3) + (l < 3) + (r < 3) >= 4) //5개 센서중 4개 이상이 거리차가 없을때 후진
   {
     Backward();  //backward 자체를 if로 바꿀지 고려해야함
   }
   else //직진
   {
-    if (f_center <= 600)  //전방 장애물을 만났을때
+    if (f_center <= 600)  //전방 장애물을 만났을때                                          //숫자 조정필요할듯
     {
       SetSpeed(0);
       SetSteering(0);
-      if (f_center <= 400 && backBool == false)
+      if (f_center <= 400 && backBool == false)                                           //숫자조정필요할듯
       {
-        Stop();
+        Stop();                                                                           //뒤로 가는지 정확하게 확인하기: 안가면 뒤로가는 코드 추가
         backBool == true;
       }
     }
@@ -507,8 +507,8 @@ void AutoDriving()
 
       if (left - right < 50) // 우측쏠림
       {
-        cur_steering = -0.2; // 조정 해야함
-        cur_speed = 0.8; // 조정 해야함
+        cur_steering = -0.2;                                                            // 조정 해야함
+        cur_speed = 0.8;                                                                // 조정 해야함
         SetSteering(cur_steering);
         SetSpeed(cur_speed);
         while (cur_steering != 0)
@@ -535,7 +535,7 @@ void AutoDriving()
           fl = f_left1 - f_left;
           fr = f_right1 - f_right;
 
-          if  ((f == 0) + (fl == 0) + (fr == 0) + (l == 0) + (r == 0) >= 4)  //정지해있을때 나와야함
+          if  ((f < 3) + (fl < 3) + (fr < 3) + (l < 3) + (r < 3) >= 4)  //정지해있을때 나와야함
           {
             break;
           }
@@ -571,7 +571,7 @@ void AutoDriving()
           fl = f_left1 - f_left;
           fr = f_right1 - f_right;
 
-          if  ((f == 0) + (fl == 0) + (fr == 0) + (l == 0) + (r == 0) >= 4)  //정지해있을때 나와야함
+          if  ((f < 3) + (fl < 3) + (fr < 3) + (l < 3) + (r < 3) >= 4)  //정지해있을때 나와야함
           {
             break;
           }
