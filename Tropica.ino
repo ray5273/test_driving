@@ -3,24 +3,28 @@
 #include "Pitches.h"
 
 // Pin map
-#define LIGHT    13  // Light 제어 핀
-#define LED      13  // LED 제어 핀
+#define LIGHT    4  // Light 제어 핀
+#define LED      6  // LED 제어 핀
 #define M_PWM    5   // DC모터 PWM 핀
 #define M_DIR1   8   // DC모터 DIR1 핀
 #define M_DIR2   7   // DC모터 DIR2 핀
 #define SERVO    9   // 서보모터 핀
 #define BUZZER   3   // 버저 핀
-#define BATTERY  A0  // 배터리 체크 핀
-#define FC_TRIG 6   // 전방 초음파 센서 TRIG 핀
-#define FC_ECHO 10 // 전방 초음파 센서 ECHO 핀
-#define FL_TRIG 11  // 전방좌측 초음파 센서 TRIG 핀
-#define FL_ECHO 12  // 전방좌측 초음파 센서 ECHO 핀
-#define FR_TRIG 3   // 전방우측 초음파 센서 TRIG 핀
-#define FR_ECHO 4   // 전방우측 초음파 센서 ECHO 핀
-#define L_TRIG  A2  // 좌측 초음파 센서 TRIG 핀
-#define L_ECHO  A1  // 좌측 초음파 센서 ECHO 핀
-#define R_TRIG  A4   // 우측 초음파 센서 TRIG 핀
-#define R_ECHO  A5  // 우측 초음파 센서 ECHO 핀
+#define BATTERY A0  // 배터리 체크 핀
+#define FC_TRIG A1   // 전방 초음파 센서 TRIG 핀
+#define FC_ECHO A0 // 전방 초음파 센서 ECHO 핀
+#define FL_TRIG A3  // 전방좌측 초음파 센서 TRIG 핀
+#define FL_ECHO A2  // 전방좌측 초음파 센서 ECHO 핀
+#define FR_TRIG 10   // 전방우측 초음파 센서 TRIG 핀
+#define FR_ECHO 11  // 전방우측 초음파 센서 ECHO 핀
+#define L_TRIG  A5  // 좌측 초음파 센서 TRIG 핀
+#define L_ECHO  A4  // 좌측 초음파 센서 ECHO 핀
+#define R_TRIG  12   // 우측 초음파 센서 TRIG 핀
+#define R_ECHO  13  // 우측 초음파 센서 ECHO 핀
+
+
+
+// 우측 초음파 센서 ECHO 핀
 #define MAX_DISTANCE  800 // 초음파 센서의 최대 감지거리
 
 // 자동차 튜닝 파라미터
@@ -61,7 +65,8 @@ int melody[] = {
   NOTE_C4, NOTE_E4, NOTE_A4, NOTE_B4, 0, NOTE_E4, NOTE_C5, NOTE_B4, NOTE_A4, 0
 };
 // 멜로디 음 빠르기
-int duration[] = {
+int duration[] = 
+{
   16, 16, 16, 16, 16, 16, 16, 16, 8, 16,
   16, 16, 16, 8, 16, 16, 16, 16, 8, 16,
   16, 16, 16, 16, 16, 16, 16, 16, 16, 8, 16,
@@ -478,7 +483,7 @@ void AutoDriving()
 
 
 
-  if ((-fl > 50) || (f_left>400&&f_right<400) ) //좌전방이 트일때  좌회전  //유턴 고려 // 400 조정해야함         //유턴조건이 뭔가이상함 ㅠ 
+  if ((-fl > 50) || (f_left>400&&f_right<400) ) //좌전방이 트일때  좌회전  //유턴 고려 // 400 조정해야함
   {
     Turn(-1);
   }
@@ -505,7 +510,7 @@ void AutoDriving()
     else  // 방향 조정 직진
     {
 
-      if (left>right && left - right < 50) // 우측쏠림
+      if (left - right < 50) // 우측쏠림
       {
         cur_steering = -0.2;                                                            // 조정 해야함
         cur_speed = 0.8;                                                                // 조정 해야함
@@ -541,7 +546,7 @@ void AutoDriving()
           }
         }
       }
-      else if (right > left && right - left < 50) //좌측쏠림
+      else if (right - left < 50) //좌측쏠림
       {
         cur_steering = 0.2;  // 조정 해야함
         cur_speed = 0.8; // 조정 해야함
