@@ -29,7 +29,7 @@
 
 // 자동차 튜닝 파라미터
 int servo_dir = 1; // 서보 회전 방향(동일: 1, 반대:-1)
-int motor_dir = 1; // 모터 회전 방향(동일:1, 반대:-1)   모터 선 위아래 바뀌어 뀌면 됨
+int motor_dir = -1; // 모터 회전 방향(동일:1, 반대:-1)   모터 선 위아래 바뀌어 뀌면 됨
 int angle_limit = 35; // 서보 모터 회전 제한 각 (단위: 도)
 int angle_offset = 0; // 서보 모터 중앙각 오프셋 (단위: 도)
 int max_rc_pwm = 255; // RC조종 모터 최대 출력 (0 ~ 255)
@@ -493,13 +493,15 @@ void AutoDriving()
 
 
 
-  if ((-fl > 50) || (f_left > 400 && f_right < 400) ) //좌전방이 트일때  좌회전  //유턴 고려 // 400 조정해야함
+  if ((-fl > 100)  ) //좌전방이 트일때  좌회전  //유턴 고려 // 400 조정해야함 //|| (f_left > 400 && f_right < 400)
   {
     Turn(-1);
+    Serial.println("좌회전중");
   }
-  else if ( (-fr > 50) || (f_left < 400 && f_right > 400)) //우전방이 트일때  우회전
+  else if ( (-fr > 100) ) //우전방이 트일때  우회전  //|| (f_left < 400 && f_right > 400)
   {
     Turn(1);
+    Serial.println("우회전중");
   }
   else if ((f < 3) + (fl < 3) + (fr < 3) + (l < 3) + (r < 3) >= 4) //5개 센서중 4개 이상이 거리차가 없을때 후진
   {
@@ -507,6 +509,8 @@ void AutoDriving()
     {
       Backward();  //backward 자체를 if로 바꿀지 고려해야함
       f_center = GetDistance(FC_TRIG, FC_ECHO);
+      
+    Serial.println("후진중");
     }
   }
   else //직진
@@ -515,10 +519,13 @@ void AutoDriving()
     {
       SetSpeed(0);
       SetSteering(0);
+          Serial.println("멈추는중");
+
       if (f_center <= 400 && backBool == false)                                           //숫자조정필요할듯
       {
         Stop();                                                                           //뒤로 가는지 정확하게 확인하기: 안가면 뒤로가는 코드 추가
         backBool == true;
+          Serial.println("backbool");
       }
     }
     else  // 방향 조정 직진
@@ -530,6 +537,7 @@ void AutoDriving()
           SetSteering(cur_steering);
           SetSpeed(cur_speed);
         */
+          Serial.println("우측쏠리는중");
         while (abs(left - right) < 50)
         {
           //서서히 왼쪽으로, 음수로
@@ -590,6 +598,8 @@ void AutoDriving()
           SetSteering(cur_steering);
           SetSpeed(cur_speed);
         */
+        
+          Serial.println("좌측쏠리는중");
         while (abs(left - right) < 50)
         {
 
@@ -648,6 +658,8 @@ void AutoDriving()
         cur_steering = 0;
         SetSpeed(cur_speed);  //최대속도 조정
         SetSteering(cur_steering);
+        
+          Serial.println("직진중");
       }
     }
     backBool == false;
