@@ -429,9 +429,10 @@ void Turn(float flag)
       cur_steering += 0.05;
       SetSteering(cur_steering);
       SetSpeed(cur_speed);
-
+      backBool == false;
       if  ((f < 3) + (fl < 3) + (fr < 3) + (l < 3) + (r < 3) >= 4)//정지해있을때 나와야함
       {
+        
         break;
       }
     }
@@ -586,6 +587,7 @@ void AutoDriving()
 
           if  ((f < 3) + (fl < 3) + (fr < 3) + (l < 3) + (r < 3) >= 4)  //정지해있을때 나와야함
           {
+            Stop();
             break;
           }
         }
@@ -662,7 +664,7 @@ void AutoDriving()
           Serial.println("직진중");
       }
     }
-    backBool == false;
+  
   }
 }
 
