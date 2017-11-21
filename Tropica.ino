@@ -83,6 +83,7 @@ float min_pwm;
 bool sound = false;
 bool autoDriving = false;
 bool backBool = false;
+bool flag=false;
 int melody_index = 0;
 unsigned long melody_time;
 unsigned long battery_time;
@@ -357,7 +358,7 @@ void Turn(float flag)
     cur_speed = 0.05;
     SetSpeed(cur_speed);  // 충돌방지
     SetSteering(-0.5);  // 원크게돌기위해
-    delay(100);                                                                           //delay 값들 조정해야할지도
+    delay(200);                                                                           //delay 값들 조정해야할지도
     cur_steering = 1;
     SetSteering(cur_steering);
     while (abs(right - left) > 50) //  좌우 센서로 받는게 최선인지 확인해야함       //회전후 어디로 쏠리느냐에 따라 right-left, left-right 결정해야할듯     //유턴할때 약간 코드가 겹칠거같기도하고
@@ -368,7 +369,7 @@ void Turn(float flag)
       right1 = GetDistance(R_TRIG, R_ECHO);
       f_left1 = GetDistance(FL_TRIG, FL_ECHO);
       f_right1 = GetDistance(FR_TRIG, FR_ECHO);
-      delay(100);
+      delay(200);
       f_center = GetDistance(FC_TRIG, FC_ECHO);
       left = GetDistance(L_TRIG, L_ECHO);
       right = GetDistance(R_TRIG, R_ECHO);
@@ -382,7 +383,7 @@ void Turn(float flag)
       fl = f_left1 - f_left;
       fr = f_right1 - f_right;
 
-      cur_steering = cur_steering - 0.05;
+      cur_steering -= 0.05;
       SetSteering(cur_steering);
       SetSpeed(cur_speed);
 
@@ -399,10 +400,10 @@ void Turn(float flag)
     cur_speed = 0.05;
     SetSpeed(cur_speed);  // 충돌방지
     SetSteering(0.5);
-    delay(100);
+    delay(200);
     cur_steering = -1;
     SetSteering(cur_steering); //원크게돌기위해
-    while ( abs(left - right) > 50)                                         
+    while ( abs(left - right) > 50)
     {
 
       f_center1 = GetDistance(FC_TRIG, FC_ECHO);
@@ -410,7 +411,7 @@ void Turn(float flag)
       right1 = GetDistance(R_TRIG, R_ECHO);
       f_left1 = GetDistance(FL_TRIG, FL_ECHO);
       f_right1 = GetDistance(FR_TRIG, FR_ECHO);
-      delay(100);
+      delay(200);
       f_center = GetDistance(FC_TRIG, FC_ECHO);
       left = GetDistance(L_TRIG, L_ECHO);
       right = GetDistance(R_TRIG, R_ECHO);
@@ -425,7 +426,7 @@ void Turn(float flag)
       r = right1 - right;
       fl = f_left1 - f_left;
       fr = f_right1 - f_right;
-      cur_steering = cur_steering + 0.05;
+      cur_steering += 0.05;
       SetSteering(cur_steering);
       SetSpeed(cur_speed);
 
@@ -445,7 +446,6 @@ void Turn(float flag)
 
 
 
-
 // 자율주행
 void AutoDriving()
 {
@@ -457,28 +457,30 @@ void AutoDriving()
 
 
 
+
   //while 문에 무조건 Setspeed 넣어줘야 돌아감, 정지했을때 나올수있게 break 필수
   //속도가 계속 주어지나 확인
 
 
 
-/*
-  SetSpeed(cur_speed);
-  delay(1000);
+  /*
+    SetSpeed(cur_speed);
+    delay(1000);
   */
 
-  
+
   f_center1 = GetDistance(FC_TRIG, FC_ECHO);
   left1 = GetDistance(L_TRIG, L_ECHO);
   right1 = GetDistance(R_TRIG, R_ECHO);
   f_left1 = GetDistance(FL_TRIG, FL_ECHO);
   f_right1 = GetDistance(FR_TRIG, FR_ECHO);
-  delay(100);
+  delay(200);
   f_center = GetDistance(FC_TRIG, FC_ECHO);
   left = GetDistance(L_TRIG, L_ECHO);
   right = GetDistance(R_TRIG, R_ECHO);
   f_left = GetDistance(FL_TRIG, FL_ECHO);
   f_right = GetDistance(FR_TRIG, FR_ECHO);
+
 
 
 
@@ -501,10 +503,10 @@ void AutoDriving()
   }
   else if ((f < 3) + (fl < 3) + (fr < 3) + (l < 3) + (r < 3) >= 4) //5개 센서중 4개 이상이 거리차가 없을때 후진
   {
-    while (f_center<100)
+    while (f_center < 100)
     {
       Backward();  //backward 자체를 if로 바꿀지 고려해야함
-      f_center=GetDistance(FC_TRIG,FC_ECHO);
+      f_center = GetDistance(FC_TRIG, FC_ECHO);
     }
   }
   else //직진
@@ -521,15 +523,38 @@ void AutoDriving()
     }
     else  // 방향 조정 직진
     {
-      if (left - right < 50 && left>right) // 우측쏠림
+      if (left - right < 50 && left > right) // 우측쏠림
       {
-        cur_steering = -0.2;                                                            // 조정 해야함
-        cur_speed = 0.8;                                                                // 조정 해야함
-        SetSteering(cur_steering);
-        SetSpeed(cur_speed);
-        while (cur_steering != 0)
+        /*
+          cur_steering = -0.2;                                                            // 조정 해야함
+          SetSteering(cur_steering);
+          SetSpeed(cur_speed);
+        */
+        while (abs(left - right) > 50)
         {
-          cur_steering = cur_steering + 0.01;
+          //서서히 왼쪽으로, 음수로
+          //flag default false
+
+          if (cur_steering < -0.1)
+          {
+            flag = true;
+          }
+
+          if (flag == false)
+          {
+            cur_steering -= 0.01;
+          }
+          else
+          {
+            cur_steering += 0.01;
+          }
+
+
+          if (cur_steering == 0)
+          {
+            break;
+          }
+
           SetSteering(cur_steering);
           SetSpeed(cur_speed);
 
@@ -538,7 +563,7 @@ void AutoDriving()
           right1 = GetDistance(R_TRIG, R_ECHO);
           f_left1 = GetDistance(FL_TRIG, FL_ECHO);
           f_right1 = GetDistance(FR_TRIG, FR_ECHO);
-          delay(100);
+          delay(200);
           f_center = GetDistance(FC_TRIG, FC_ECHO);
           left = GetDistance(L_TRIG, L_ECHO);
           right = GetDistance(R_TRIG, R_ECHO);
@@ -556,16 +581,39 @@ void AutoDriving()
             break;
           }
         }
+        SetSteering(0);
       }
-      else if (right - left < 50 && left<right)//좌측쏠림
+      else if (right - left < 50 && left < right) //좌측쏠림
       {
-        cur_steering = 0.2;  // 조정 해야함
-        cur_speed = 0.8; // 조정 해야함
-        SetSteering(cur_steering);
-        SetSpeed(cur_speed);
-        while (cur_steering != 0)
+        /*
+          cur_steering = 0.2;  // 조정 해야함
+          SetSteering(cur_steering);
+          SetSpeed(cur_speed);
+        */
+        while (abs(left - right) > 50)
         {
-          cur_steering = cur_steering - 0.01;
+
+          if (cur_steering > 0.1)
+          {
+            flag = true;
+          }
+
+          if (flag == false)
+          {
+            cur_steering += 0.01;
+
+          }
+          else
+          {
+            cur_steering -= 0.01;
+          }
+
+
+          if (cur_steering == 0)
+          {
+            break;
+          }
+
           SetSteering(cur_steering);
           SetSpeed(cur_speed);
 
@@ -574,7 +622,7 @@ void AutoDriving()
           right1 = GetDistance(R_TRIG, R_ECHO);
           f_left1 = GetDistance(FL_TRIG, FL_ECHO);
           f_right1 = GetDistance(FR_TRIG, FR_ECHO);
-          delay(100);
+          delay(200);
           f_center = GetDistance(FC_TRIG, FC_ECHO);
           left = GetDistance(L_TRIG, L_ECHO);
           right = GetDistance(R_TRIG, R_ECHO);
@@ -592,6 +640,7 @@ void AutoDriving()
             break;
           }
         }
+        SetSteering(0);
       }
       else // 걍 직진
       {
@@ -601,10 +650,9 @@ void AutoDriving()
         SetSteering(cur_steering);
       }
     }
+    backBool == false;
   }
 }
-
-
 
 
 
@@ -776,9 +824,6 @@ void AutoDriving()
     SetSteering(compute_steering);
     SetSpeed(compute_speed);
   */
-}
-
-
 
 
 
