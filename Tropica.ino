@@ -336,7 +336,7 @@ void Stop()    // 변수 조정
 {
   SetSteering(0); // 없앨지 말지 고민중
   SetSpeed(-0.2);
-  delay(200);
+  delay(100);
 }
 
 
@@ -358,7 +358,7 @@ void Turn(float flag)
     cur_speed = 0.05;
     SetSpeed(cur_speed);  // 충돌방지
     SetSteering(-0.5);  // 원크게돌기위해
-    delay(200);                                                                           //delay 값들 조정해야할지도
+    delay(100);                                                                           //delay 값들 조정해야할지도
     cur_steering = 1;
     SetSteering(cur_steering);
     while (abs(right - left) > 50) //  좌우 센서로 받는게 최선인지 확인해야함       //회전후 어디로 쏠리느냐에 따라 right-left, left-right 결정해야할듯     //유턴할때 약간 코드가 겹칠거같기도하고
@@ -369,7 +369,7 @@ void Turn(float flag)
       right1 = GetDistance(R_TRIG, R_ECHO);
       f_left1 = GetDistance(FL_TRIG, FL_ECHO);
       f_right1 = GetDistance(FR_TRIG, FR_ECHO);
-      delay(200);
+      delay(100);
       f_center = GetDistance(FC_TRIG, FC_ECHO);
       left = GetDistance(L_TRIG, L_ECHO);
       right = GetDistance(R_TRIG, R_ECHO);
@@ -400,7 +400,7 @@ void Turn(float flag)
     cur_speed = 0.05;
     SetSpeed(cur_speed);  // 충돌방지
     SetSteering(0.5);
-    delay(200);
+    delay(100);
     cur_steering = -1;
     SetSteering(cur_steering); //원크게돌기위해
     while ( abs(left - right) > 50)
@@ -411,7 +411,7 @@ void Turn(float flag)
       right1 = GetDistance(R_TRIG, R_ECHO);
       f_left1 = GetDistance(FL_TRIG, FL_ECHO);
       f_right1 = GetDistance(FR_TRIG, FR_ECHO);
-      delay(200);
+      delay(100);
       f_center = GetDistance(FC_TRIG, FC_ECHO);
       left = GetDistance(L_TRIG, L_ECHO);
       right = GetDistance(R_TRIG, R_ECHO);
@@ -474,7 +474,7 @@ void AutoDriving()
   right1 = GetDistance(R_TRIG, R_ECHO);
   f_left1 = GetDistance(FL_TRIG, FL_ECHO);
   f_right1 = GetDistance(FR_TRIG, FR_ECHO);
-  delay(200);
+  delay(100);
   f_center = GetDistance(FC_TRIG, FC_ECHO);
   left = GetDistance(L_TRIG, L_ECHO);
   right = GetDistance(R_TRIG, R_ECHO);
@@ -563,7 +563,7 @@ void AutoDriving()
           right1 = GetDistance(R_TRIG, R_ECHO);
           f_left1 = GetDistance(FL_TRIG, FL_ECHO);
           f_right1 = GetDistance(FR_TRIG, FR_ECHO);
-          delay(200);
+          delay(100);
           f_center = GetDistance(FC_TRIG, FC_ECHO);
           left = GetDistance(L_TRIG, L_ECHO);
           right = GetDistance(R_TRIG, R_ECHO);
@@ -622,7 +622,7 @@ void AutoDriving()
           right1 = GetDistance(R_TRIG, R_ECHO);
           f_left1 = GetDistance(FL_TRIG, FL_ECHO);
           f_right1 = GetDistance(FR_TRIG, FR_ECHO);
-          delay(200);
+          delay(100);
           f_center = GetDistance(FC_TRIG, FC_ECHO);
           left = GetDistance(L_TRIG, L_ECHO);
           right = GetDistance(R_TRIG, R_ECHO);
@@ -677,14 +677,14 @@ void AutoDriving()
     {
     cur_steering += 0.1;
     SetSteering(cur_steering);
-    delay(200); // 회전 변화를 위해서 필수
+    delay(100); // 회전 변화를 위해서 필수
     }
   
   while ( cur_steering > 0) //핸들 풀기
   {
     cur_steering -= 0.05;  //1변수
     SetSteering(cur_steering);
-    delay(200);  //2변수
+    delay(100);  //2변수
   }
 
   delay(3000);
@@ -703,7 +703,7 @@ void AutoDriving()
   {
     cur_steering += 0.05;
     SetSteering(cur_steering);
-    delay(200);
+    delay(100);
   }
 
 
