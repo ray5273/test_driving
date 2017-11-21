@@ -11,8 +11,8 @@
 #define SERVO    9   // 서보모터 핀
 #define BUZZER   3   // 버저 핀
 #define BATTERY A0  // 배터리 체크 핀
-#define FC_TRIG A1   // 전방 초음파 센서 TRIG 핀
-#define FC_ECHO A0 // 전방 초음파 센서 ECHO 핀
+#define FC_TRIG A5   // 전방 초음파 센서 TRIG 핀
+#define FC_ECHO A4 // 전방 초음파 센서 ECHO 핀
 #define FL_TRIG A3  // 전방좌측 초음파 센서 TRIG 핀
 #define FL_ECHO A2  // 전방좌측 초음파 센서 ECHO 핀
 #define FR_TRIG 10   // 전방우측 초음파 센서 TRIG 핀
@@ -29,7 +29,7 @@
 
 // 자동차 튜닝 파라미터
 int servo_dir = 1; // 서보 회전 방향(동일: 1, 반대:-1)
-int motor_dir = 1; // 모터 회전 방향(동일:1, 반대:-1)
+int motor_dir = 1; // 모터 회전 방향(동일:1, 반대:-1)   모터 선 위아래 바뀌어 뀌면 됨
 int angle_limit = 35; // 서보 모터 회전 제한 각 (단위: 도)
 int angle_offset = 0; // 서보 모터 중앙각 오프셋 (단위: 도)
 int max_rc_pwm = 255; // RC조종 모터 최대 출력 (0 ~ 255)
@@ -43,7 +43,7 @@ int battery_cell = 2; // 배터리 셀 개수
 float voltage_error = 1.08; // 전압 오차 (1이 오차 없음)
 
 // 자율주행 튜닝 파라미터
-int max_ai_pwm = 180; // 자율주행 모터 최대 출력 (0 ~ 255)
+int max_ai_pwm = 255; // 자율주행 모터 최대 출력 (0 ~ 255)
 int min_ai_pwm = 110; // 자율주행 모터 최소 출력 (0 ~ 255)
 int center_detect = 400; // 전방 감지 거리 (단위: mm)
 int center_start = 160; // 전방 출발 거리 (단위: mm)
@@ -456,10 +456,18 @@ void AutoDriving()
   // 판단 근거가 없다면 이전 상태와 동일하게 수행
 
 
+
   //while 문에 무조건 Setspeed 넣어줘야 돌아감, 정지했을때 나올수있게 break 필수
   //속도가 계속 주어지나 확인
 
 
+
+/*
+  SetSpeed(cur_speed);
+  delay(1000);
+  */
+
+  
   f_center1 = GetDistance(FC_TRIG, FC_ECHO);
   left1 = GetDistance(L_TRIG, L_ECHO);
   right1 = GetDistance(R_TRIG, R_ECHO);
@@ -483,17 +491,21 @@ void AutoDriving()
 
 
 
-  if ((-fl > 50) || (f_left>400&&f_right<400) ) //좌전방이 트일때  좌회전  //유턴 고려 // 400 조정해야함
+  if ((-fl > 50) || (f_left > 400 && f_right < 400) ) //좌전방이 트일때  좌회전  //유턴 고려 // 400 조정해야함
   {
     Turn(-1);
   }
-  else if ( (-fr > 50) || (f_left<400&&f_right>400)) //우전방이 트일때  우회전
+  else if ( (-fr > 50) || (f_left < 400 && f_right > 400)) //우전방이 트일때  우회전
   {
     Turn(1);
   }
   else if ((f < 3) + (fl < 3) + (fr < 3) + (l < 3) + (r < 3) >= 4) //5개 센서중 4개 이상이 거리차가 없을때 후진
   {
-    Backward();  //backward 자체를 if로 바꿀지 고려해야함
+    while (f_center<100)
+    {
+      Backward();  //backward 자체를 if로 바꿀지 고려해야함
+      f_center=GetDistance(FC_TRIG,FC_ECHO);
+    }
   }
   else //직진
   {
@@ -509,8 +521,7 @@ void AutoDriving()
     }
     else  // 방향 조정 직진
     {
-
-      if (left - right < 50) // 우측쏠림
+      if (left - right < 50 && left>right) // 우측쏠림
       {
         cur_steering = -0.2;                                                            // 조정 해야함
         cur_speed = 0.8;                                                                // 조정 해야함
@@ -546,7 +557,7 @@ void AutoDriving()
           }
         }
       }
-      else if (right - left < 50) //좌측쏠림
+      else if (right - left < 50 && left<right)//좌측쏠림
       {
         cur_steering = 0.2;  // 조정 해야함
         cur_speed = 0.8; // 조정 해야함
@@ -591,6 +602,7 @@ void AutoDriving()
       }
     }
   }
+}
 
 
 
@@ -600,10 +612,7 @@ void AutoDriving()
 
 
 
-
-
-
-
+/*
   //회전 연습 코드
 
   SetSpeed(0.3);
@@ -622,7 +631,7 @@ void AutoDriving()
     SetSteering(cur_steering);
     delay(200); // 회전 변화를 위해서 필수
     }
-  */
+  
   while ( cur_steering > 0) //핸들 풀기
   {
     cur_steering -= 0.05;  //1변수
@@ -648,8 +657,6 @@ void AutoDriving()
     SetSteering(cur_steering);
     delay(200);
   }
-
-
 
 
 
@@ -812,7 +819,8 @@ void setup()
 
 void loop()
 {
-  CheckBattery();
+  
+  //CheckBattery();
 
   /*
       수신데이터 샘플
