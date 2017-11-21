@@ -530,7 +530,7 @@ void AutoDriving()
           SetSteering(cur_steering);
           SetSpeed(cur_speed);
         */
-        while (abs(left - right) > 50)
+        while (abs(left - right) < 50)
         {
           //서서히 왼쪽으로, 음수로
           //flag default false
@@ -590,7 +590,7 @@ void AutoDriving()
           SetSteering(cur_steering);
           SetSpeed(cur_speed);
         */
-        while (abs(left - right) > 50)
+        while (abs(left - right) < 50)
         {
 
           if (cur_steering > 0.1)
